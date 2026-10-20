@@ -16,8 +16,8 @@ for c in cards:
             assert len(reading['text'])>30
             assert not re.search(r'Карта Название Значение|Зацепки приключения|## PDF page',reading['text'])
     assert not re.search(r'Карта Название Значение|## PDF page',c['meaning'])
-assert len(reader)==14 and len({s['id'] for s in reader})==14
-assert all(s['body'] and s['extracts'] or s['id']=='start' for s in reader)
+assert len(reader)>=15 and len({s['id'] for s in reader})==len(reader)
+assert all(s['body'] and (s['extracts'] or s.get('editorial') or s['id']=='start') for s in reader)
 class Links(HTMLParser):
     def handle_starttag(self,tag,attrs):
         attrs=dict(attrs)
@@ -28,4 +28,4 @@ class Links(HTMLParser):
 for file in root.glob('*.html'):Links().feed(file.read_text(encoding='utf-8'))
 for file in json.loads((root/'offline-manifest.json').read_text(encoding='utf-8')):
     assert (root/file).exists(),file
-print('PASS: 54 unique cards, all roles and images; 14 chapters; HTML links and offline manifest.')
+print(f'PASS: 54 unique cards, all roles and images; {len(reader)} chapters; HTML links and offline manifest.')

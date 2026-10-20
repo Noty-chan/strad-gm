@@ -1,4 +1,4 @@
-const VERSION='strad-gm-20261020-v1';
+const VERSION='strad-gm-20261020-v2';
 const SHELL=['./','index.html','tarokka.html','style.css','reader.css','reader.js','tarokka.js','offline.js','reader.json','cards.json','assets/mark.svg','offline-manifest.json'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('strad-gm-')&&k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
