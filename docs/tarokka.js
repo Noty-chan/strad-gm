@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const key='strad.tarokka.v1';
-let state={deck:'high',suit:'all',saved:[],notes:{},spread:[null,null,null,null,null],last:null};
+let state={deck:'high',suit:'all',readingMode:'personal',saved:[],notes:{},spread:[null,null,null,null,null],last:null};
 try{Object.assign(state,JSON.parse(localStorage.getItem(key)||'{}'));}catch{}
 if(!Array.isArray(state.saved))state.saved=[];
 if(!Array.isArray(state.spread)||state.spread.length!==5)state.spread=[null,null,null,null,null];
@@ -13,14 +13,15 @@ function toast(message){const e=$('#toast');($('#card-dialog').open?$('#card-dia
 function make(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 const clean=s=>s.toLocaleLowerCase('ru').replaceAll('ё','е');
 function byId(id){return data.cards.find(c=>c.id===id);}
-function description(){return state.deck==='high'?'Старшая колода — силы судьбы. Союзник и место встречи со Страдом.':state.deck==='common'?'Младшая колода — четыре масти. Места трёх сокровищ.':'Все 54 карты. Общее значение и книжные толкования.';}
+function description(){if(state.readingMode==='personal')return 'Личная судьба: выбери образ героя. Книжное значение и авторская заготовка показаны отдельно.';return state.deck==='high'?'Старшая колода — силы судьбы. Союзник и место встречи со Страдом.':state.deck==='common'?'Младшая колода — четыре масти. Места трёх сокровищ.':'Все 54 карты. Общее значение и книжные толкования.';}
 function filters(){
   if(!data)return;
+  $$('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.readingMode)));
   $$('[data-deck]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.deck===state.deck)));
   $$('[data-suit]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.suit===state.suit)));
   $('#suit-filters').hidden=state.deck==='high';
   const q=clean($('#card-search').value.trim());
-  filtered=data.cards.filter(c=>(state.deck==='all'||c.deck===state.deck)&&(state.suit==='all'||state.deck==='high'||c.suit===state.suit)&&(!$('#only-saved').checked||state.saved.includes(c.id))&&(!q||clean([c.name,c.english,c.number,c.meaning,c.playing,...Object.values(c.readings).flat().map(r=>r.text),c.id==='high-6'?'Привидение':'',c.id==='high-13'?'Прорицатель':'',c.id==='glyphs-3'?'Целитель':''].join(' ')).includes(q)));
+  filtered=data.cards.filter(c=>(state.deck==='all'||c.deck===state.deck)&&(state.suit==='all'||state.deck==='high'||c.suit===state.suit)&&(!$('#only-saved').checked||state.saved.includes(c.id))&&(!q||clean([c.name,c.english,c.number,c.meaning,c.playing,JSON.stringify(c.personal||{}),...Object.values(c.readings).flat().map(r=>r.text),c.id==='high-6'?'Привидение':'',c.id==='high-13'?'Прорицатель':'',c.id==='glyphs-3'?'Целитель':''].join(' ')).includes(q)));
   const grid=$('#cards-grid');grid.replaceChildren();$('#no-cards').hidden=filtered.length>0;
   $('#deck-description').textContent=q?`Найдено: ${filtered.length}. Поиск по названиям, значениям и толкованиям.`:description();
   filtered.forEach(c=>{
@@ -44,10 +45,12 @@ function oracleSplit(text){
 }
 function renderReading(){
   const c=byId(current),wrap=$('#reading-content');wrap.replaceChildren();wrap.className='reading-content';
-  const options=c.deck==='common'?[['treasure','Сокровище']]:[['ally','Союзник'],['strahd','Страд в замке']];
-  if(!options.some(([r])=>r===role))role=options[0][0];
+  const campaignOptions=c.deck==='common'?[['treasure','Сокровище']]:[['ally','Союзник'],['strahd','Страд в замке']];
+  const options=[['personal','Личная судьба'],...campaignOptions];
+  if(!options.some(([r])=>r===role)||role===null)role=state.readingMode==='personal'?'personal':campaignOptions[0][0];
   const tabs=$('#reading-tabs');tabs.replaceChildren();
   for(const [r,label] of options){const b=make('button',label);b.setAttribute('aria-pressed',String(r===role));b.addEventListener('click',()=>{role=r;renderReading();});tabs.append(b);}
+  if(role==='personal'){renderPersonal(c,wrap);return;}
   wrap.append(make('p',role==='treasure'?'Это толкование используется в позициях 1–3. Карта указывает место сокровища; конкретный предмет определяет позиция.':role==='ally'?'Позиция 4: союзник. Если книга даёт несколько вариантов, ведущий выбирает один из них.':'Позиция 5: место в Равенлофте, где герои впервые гарантированно встретят Страда, если тот ещё не вынужден вернуться в гроб.','role-note'));
   const variants=c.readings[role]||[];
   variants.forEach((r,i)=>{
@@ -59,11 +62,20 @@ function renderReading(){
   });
   if(c.id==='glyphs-3'||c.id==='high-6'||c.id==='high-13')wrap.append(make('p',c.id==='glyphs-3'?'В главе 1 эта же карта названа «Целитель». В приложении Е — «Лекарь».':c.id==='high-6'?'В главе 1 эта же карта называется «Привидение». В приложении Е — «Призрак».':'В главе 1 эта же карта называется «Прорицатель». В приложении Е — «Провидец».','role-note'));
 }
+function renderPersonal(c,wrap){
+  const p=c.personal;if(!p){wrap.append(make('p','Обнови страницу, чтобы загрузить личные трактовки.'));return;}
+  wrap.append(make('p',p.kind,'role-note'),make('h3','Возможные слова предсказания'),make('blockquote',p.omen),make('h3','Какое личное дело может обозначать'),make('p',p.task),make('h3','Что остаётся выбором героя'),make('p',p.choice));
+  const copyOmen=make('button','Скопировать личное предсказание','quiet');copyOmen.addEventListener('click',()=>copy(c.name+' — авторская личная трактовка\n'+p.omen+'\nТема: '+p.task+'\nВыбор: '+p.choice));wrap.append(copyOmen);
+  if(p.raisingExample){const box=make('aside',undefined,'personal-source');box.append(make('h3','Прямой пример из «Повышения ставок»'),make('p',p.raisingExample));wrap.append(box);}
+  wrap.append(make('p',p.basis,'source-ref'));
+  if(p.campaignDraft){const d=p.campaignDraft,box=make('section',undefined,'personal-draft');box.append(make('h3','Для нашей кампании: '+d.hero),make('p',d.status,'role-note'),make('blockquote',d.text),make('p',d.context));wrap.append(box);}
+  const link=make('a','Книжный метод, варианты из гайдов и источники →');link.href='index.html#personal-reading';wrap.append(link);
+}
 function openCard(id,{replace=false}={}){
   const c=byId(id);if(!c)return;current=id;state.last=id;save();
   $('#card-title').textContent=c.name;$('#card-number').textContent=c.number+' · '+(c.deck==='high'?'Старшая колода':'Младшая колода');$('#card-english').textContent=c.english+' · обычная колода: '+c.playing;
   $('#card-art').src=c.image;$('#card-art').alt=`${c.name} — оригинальная карта ${c.english}`;
-  $('#card-meaning').textContent=c.meaning;$('#meaning-source').textContent=`Проклятье Страда · приложение Е · страница PDF ${c.meaningPage}`;
+  $('#card-meaning').textContent=c.meaning;$('#meaning-source').textContent=`Дословно: Проклятье Страда · приложение Е · PDF ${c.meaningPage} / печатная ${c.meaningPage-2}. Сверено с PDF.`;
   $('#art-source').textContent=`Иллюстрация: Проклятье Страда, страница PDF ${c.artPage}. Извлечена без перерисовки.`;
   $('#card-note').value=state.notes[id]||'';
   updateSaved();renderReading();
@@ -73,7 +85,7 @@ function openCard(id,{replace=false}={}){
   $('#assign-popover').hidden=true;$('#card-scroll').scrollTop=0;
   if(!$('#card-dialog').open){$('#card-dialog').showModal();document.body.style.overflow='hidden';}
   const next=filtered[index+1];if(next){const im=new Image();im.src=next.image;}
-  if(!replace)history.replaceState(null,'','#card='+encodeURIComponent(id));
+  if(!replace)history.replaceState(null,'','#card='+encodeURIComponent(id)+(state.readingMode==='personal'?'&mode=personal':''));
 }
 function updateSaved(){const saved=state.saved.includes(current);$('#card-save').setAttribute('aria-pressed',String(saved));$('#card-save').textContent=saved?'★':'☆';$('#card-save').setAttribute('aria-label',saved?'Убрать карту из закладок':'Добавить карту в закладки');}
 function nextCard(delta){const i=filtered.findIndex(x=>x.id===current);if(i>=0&&filtered[i+delta])openCard(filtered[i+delta].id);}
@@ -113,6 +125,7 @@ $('#copy-spread').addEventListener('click',()=>copy('Черновик общег
 $('#clear-spread').addEventListener('click',()=>{if(state.spread.some(Boolean)&&!confirm('Очистить пять карт черновика?'))return;state.spread=[null,null,null,null,null];selectedSlot=null;save();renderSpread();});
 $('#spread-toggle').addEventListener('click',()=>{const p=$('#spread-panel');p.hidden=!p.hidden;$('#spread-toggle').setAttribute('aria-expanded',String(!p.hidden));});
 $$('[data-deck]').forEach(b=>b.addEventListener('click',()=>{state.deck=b.dataset.deck;state.suit='all';filters();}));
+$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.readingMode=b.dataset.mode;role=null;filters();if($('#card-dialog').open)renderReading();}));
 $$('[data-suit]').forEach(b=>b.addEventListener('click',()=>{state.suit=b.dataset.suit;filters();}));
 $('#card-search').addEventListener('input',filters);$('#only-saved').addEventListener('change',filters);
 $('#reset-filters').addEventListener('click',()=>{state.deck='all';state.suit='all';$('#card-search').value='';$('#only-saved').checked=false;filters();});
@@ -120,8 +133,14 @@ document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(documen
 let touch=null;
 $('#swipe-area').addEventListener('touchstart',e=>{if(e.touches.length===1)touch={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
 $('#swipe-area').addEventListener('touchend',e=>{if(!touch||!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-touch.x,dy=e.changedTouches[0].clientY-touch.y;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5)nextCard(dx<0?1:-1);touch=null;},{passive:true});
+function openFromHash(){
+  if(!data)return;
+  const params=new URLSearchParams(location.hash.slice(1));if(['personal','campaign'].includes(params.get('mode'))){state.readingMode=params.get('mode');role=null;}
+  const wanted=params.get('card');if(wanted&&byId(wanted)){state.deck=byId(wanted).deck;state.suit='all';filters();openCard(wanted,{replace:true});}
+}
+window.addEventListener('hashchange',openFromHash);
 try{
   const response=await fetch('cards.json');if(!response.ok)throw new Error('HTTP '+response.status);data=await response.json();filters();renderSpread();
-  const wanted=new URLSearchParams(location.hash.slice(1)).get('card');if(wanted&&byId(wanted)){state.deck=byId(wanted).deck;state.suit='all';filters();openCard(wanted,{replace:true});}
+  openFromHash();
 }catch(error){$('#cards-grid').replaceChildren(make('p','Не удалось загрузить карты. Проверь соединение и обнови страницу.'));console.error(error);}
 import {setupOffline} from './offline.js';setupOffline();

@@ -9,6 +9,8 @@ assert sum(c['deck']=='high' for c in cards)==14
 for c in cards:
     assert (root/c['image']).is_file()
     assert len(c['meaning'])>20
+    assert c['meaningKind'].startswith('Дословный текст')
+    assert all(c['personal'][k] for k in ['omen','task','choice','kind'])
     roles=['ally','strahd'] if c['deck']=='high' else ['treasure']
     for role in roles:
         assert c['readings'].get(role)
@@ -17,6 +19,9 @@ for c in cards:
             assert not re.search(r'Карта Название Значение|Зацепки приключения|## PDF page',reading['text'])
     assert not re.search(r'Карта Название Значение|## PDF page',c['meaning'])
 assert len(reader)>=15 and len({s['id'] for s in reader})==len(reader)
+audit=json.loads((root/'meaning-audit.json').read_text(encoding='utf-8'))
+assert audit['matched']==54 and all(c['exactMatch'] for c in audit['cards'])
+assert any(s['id']=='personal-reading' for s in reader)
 assert all(s['body'] and (s['extracts'] or s.get('editorial') or s['id']=='start') for s in reader)
 class Links(HTMLParser):
     def handle_starttag(self,tag,attrs):

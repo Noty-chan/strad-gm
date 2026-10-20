@@ -97,5 +97,7 @@ def build(page,pages,between,dehyphen,flat,out):
 
     from ireena_guides import section
     sections.insert(next(i for i,s in enumerate(sections) if s['id']=='ireena-secrets')+1,section())
+    from tarokka_guide import section as tarokka_section
+    sections.insert(next(i for i,s in enumerate(sections) if s['id']=='reading')+1,tarokka_section(page,between,dehyphen))
     (out/'reader.json').write_text(json.dumps(dict(title='Из Баровии к озеру Тсер',version='2026-10-20',sections=sections),ensure_ascii=False,indent=2),encoding='utf-8')
     print('Reader sections:',len(sections),'excerpts:',sum(len(s['extracts']) for s in sections))

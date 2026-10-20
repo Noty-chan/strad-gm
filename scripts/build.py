@@ -140,7 +140,19 @@ assert all(c['meaning'] and c['image'] for c in cards)
 for c in cards:
     assert 'Карта Название Значение' not in c['meaning'],c['id']
     assert not re.search(r'Р асположение|Зацепки приключения',str(c['readings'])),c['id']
-(OUT/'cards.json').write_text(json.dumps(dict(version='2026-10-20',cards=cards,suits={k:v[0] for k,v in SUITS.items()}),ensure_ascii=False,indent=2),encoding='utf-8')
+# Independent check against the actual PDF, not just the Markdown extraction.
+meaning_pdf=fitz.open(CAMPAIGN/'Проклятье Страда.pdf')
+audit=[]
+for card in cards:
+    exact=flat(card['meaning']) in flat(meaning_pdf[card['meaningPage']-1].get_text())
+    assert exact,('Meaning differs from PDF',card['id'])
+    card['meaningKind']='Дословный текст Проклятья Страда, приложение Е'
+    audit.append(dict(id=card['id'],name=card['name'],pdfPage=card['meaningPage'],printedPage=card['meaningPage']-2,exactMatch=exact))
+meaning_pdf.close()
+(OUT/'meaning-audit.json').write_text(json.dumps(dict(source='Проклятье Страда.pdf',appendix='Е',checked='2026-10-20',normalization='Только соединение переносов слов и пробелов; без изменения формулировок',matched=len(audit),cards=audit),ensure_ascii=False,indent=2),encoding='utf-8')
+import personal_tarokka
+personal_tarokka.enrich(cards)
+(OUT/'cards.json').write_text(json.dumps(dict(version='2026-10-20-personal',cards=cards,suits={k:v[0] for k,v in SUITS.items()}),ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(dict(cards=len(cards),common=sum(c['deck']=='common' for c in cards),high=sum(c['deck']=='high' for c in cards),images=image_index,readings={role:sum(len(c['readings'].get(role,[])) for c in cards) for role in ['treasure','ally','strahd']}),ensure_ascii=False))
 import reader
 reader.build(page,pages,between,dehyphen,flat,OUT)

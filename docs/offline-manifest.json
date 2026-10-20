@@ -2,6 +2,7 @@
   "./",
   "cards.json",
   "index.html",
+  "meaning-audit.json",
   "offline.js",
   "reader.css",
   "reader.js",

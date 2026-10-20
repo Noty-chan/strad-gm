@@ -1,0 +1,387 @@
+{
+  "source": "Проклятье Страда.pdf",
+  "appendix": "Е",
+  "checked": "2026-10-20",
+  "normalization": "Только соединение переносов слов и пробелов; без изменения формулировок",
+  "matched": 54,
+  "cards": [
+    {
+      "id": "high-1",
+      "name": "Артефакт",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-2",
+      "name": "Зверь",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-3",
+      "name": "Сломленный",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-4",
+      "name": "Тёмный Властелин",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-5",
+      "name": "Донжон",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-6",
+      "name": "Призрак",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-7",
+      "name": "Палач",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-8",
+      "name": "Всадник",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-9",
+      "name": "Невинный",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-10",
+      "name": "Марионетка",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-11",
+      "name": "Туманы",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-12",
+      "name": "Ворон",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-13",
+      "name": "Провидец",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "high-14",
+      "name": "Искуситель",
+      "pdfPage": 241,
+      "printedPage": 239,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-0",
+      "name": "Воин",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-1",
+      "name": "Мститель",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-2",
+      "name": "Паладин",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-3",
+      "name": "Солдат",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-4",
+      "name": "Наёмник",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-5",
+      "name": "Мирмидон",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-6",
+      "name": "Берсерк",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-7",
+      "name": "Сокрытый",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-8",
+      "name": "Диктатор",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "swords-9",
+      "name": "Мучитель",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-0",
+      "name": "Волшебник",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-1",
+      "name": "Превращающий",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-2",
+      "name": "Прорицающий",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-3",
+      "name": "Очарователь",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-4",
+      "name": "Преграждающий",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-5",
+      "name": "Элементалист",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-6",
+      "name": "Воплощающий",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-7",
+      "name": "Иллюзионист",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-8",
+      "name": "Некромант",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "stars-9",
+      "name": "Сотворяющий",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-0",
+      "name": "Плут",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-1",
+      "name": "Бретёр",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-2",
+      "name": "Филантроп",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-3",
+      "name": "Торговец",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-4",
+      "name": "Купец",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-5",
+      "name": "Член гильдии",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-6",
+      "name": "Попрошайка",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-7",
+      "name": "Вор",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-8",
+      "name": "Сборщик податей",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "coins-9",
+      "name": "Скряга",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-0",
+      "name": "Священник",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-1",
+      "name": "Монах",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-2",
+      "name": "Миссионер",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-3",
+      "name": "Лекарь",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-4",
+      "name": "Пастух",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-5",
+      "name": "Друид",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-6",
+      "name": "Анархист",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-7",
+      "name": "Шарлатан",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-8",
+      "name": "Епископ",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    },
+    {
+      "id": "glyphs-9",
+      "name": "Предатель",
+      "pdfPage": 242,
+      "printedPage": 240,
+      "exactMatch": true
+    }
+  ]
+}
