@@ -9,16 +9,15 @@ md=MarkdownIt('commonmark',{'html':False}).enable('table')
 plans=campaign/'02_Сессии/Планы'
 research=campaign/'07_Источники/Большой разбор 2026-10-23'
 spec=[
- ('plan','План на сегодня',plans/'Сегодня — деревня Баровия.md','Сначала · 5 минут'),
- ('village','Карточки деревни',plans/'Сегодня — карточки деревни.md','За столом'),
+ ('plan','Материалы на сегодня',plans/'Сегодня — деревня Баровия.md','Выбранное ведущим · открытые связи'),
+ ('village','Деревня: сведения и связи',plans/'Сегодня — карточки деревни.md','Книги и версия кампании'),
  ('personal','Личные зацепки',plans/'Сегодня — личные зацепки.md','Джари · Корво · Рататуй'),
- ('cooking','Первая готовка',plans/'Кулинария — первый запуск.md','Пробуем · не более 30 минут'),
- ('remi','Тренировка Реми',plans/'Сегодня — тренировка Реми.md','Уже выданные способности'),
+ ('cooking','Кулинария: правила и пробник',plans/'Кулинария — первый запуск.md','Механика и техническая заготовка'),
+ ('remi','Реми: справка',plans/'Сегодня — тренировка Реми.md','Уже выданные способности'),
  ('sources','Сверка источников',plans/'Сегодня — сверка источников.md','Книжное / выбранное / предложенное'),
- ('critic','Критика плана',plans/'Сегодня — критика плана.md','Проверка подготовки'),
 ]
 future=[
- ('seeds','Что посеять уже сегодня',plans/'Ружья будущего — деревня и Тсер.md','Короткий отбор · затем резерв'),
+ ('seeds','Связи с будущим',plans/'Ружья будущего — деревня и Тсер.md','Книги · возможные пересечения'),
  ('overview','Как читать дополнения',research/'README.md','Обзор исследования'),
  ('reloaded','Reloaded: будущие связи',research/'Reloaded — карта и ранние следы.md','Глубже · сюжет и развилки'),
  ('mandy','MandyMod: будущие связи',research/'MandyMod — карта и ранние следы.md','Глубже · отношения и последствия'),
@@ -47,8 +46,6 @@ def render(p):
     html=md.render(text).replace('<h2>','<h3>').replace('</h2>','</h3>')
     if p==handoff:
         html='<div class="campaign-box"><strong>Готово к игре:</strong> 7 закрытых страниц, лист ван Рихтена, кандидат Сава, макросы плана, карт и обеда. Токены не дублировались. Открывай «Codex — подготовка сессии 6».<br><strong>Перед показом карты:</strong> на старой обзорной Баровии уже есть видимые зомби и крысы — сначала осмотри её.</div><details class="excerpt"><summary>Полная сводка: расположение токенов, UUID и ручные действия</summary>'+html+'</details>'
-    if p==plans/'Сегодня — деревня Баровия.md':
-        html='<div class="campaign-box"><strong>5 минут:</strong> этот план и сводка Foundry.<br><strong>Ещё 10–15 минут:</strong> карточки деревни, личные зацепки, готовка и Реми.<br><strong>Есть время:</strong> открой вкладку «Ружья»; подробные разборы дополнений там — для изучения по интересу.</div>'+html
     return html.replace('<table>','<div class="table-scroll"><table>').replace('</table>','</table></div>')
 def build(name,entries,title,subtitle):
     sections=[]
@@ -61,7 +58,7 @@ def build(name,entries,title,subtitle):
     template=template.replace('Из Баровии<br>к озеру Тсер',title)
     template=template.replace('Ирина, Сваличская дорога, виселица и карты судьбы.<br>Обе книги и ваши решения — рядом.',subtitle)
     template=template.replace('БЛИЖАЙШАЯ ИГРА <span>ПОДГОТОВКА В ДОРОГЕ</span>','23 ОКТЯБРЯ <span>СЕССИЯ ПОСЛЕ ПЯТОЙ</span>')
-    template=re.sub(r'<a href="tarokka.html" class="tarokka-banner">.*?</a>','<div class="campaign-box">Начни с первого раздела. Остальное — карточки по надобности. Новые варианты подписаны; спойлеры ведущего.</div>',template)
+    template=re.sub(r'<a href="tarokka.html" class="tarokka-banner">.*?</a>','<div class="campaign-box">Сведения из книг, выбранное ведущим и возможные связи. Без расписания и назначенных сцен.</div>',template)
     template=template.replace('aria-current="page"','')
     template=template.replace('href="'+name+'.html"','href="'+name+'.html" aria-current="page"')
     template=template.replace('обновлено 20.10.2026','обновлено 23.10.2026')
@@ -71,13 +68,13 @@ for name in ['index.html','tarokka.html']:
     p=docs/name;s=p.read_text(encoding='utf-8')
     if 'href="today.html"' not in s:s=s.replace('</nav></header>','<a href="today.html">Сегодня</a><a href="future.html">Ружья</a></nav></header>',1)
     p.write_text(s,encoding='utf-8')
-build('today',spec,'Сегодня в Баровии','Донавич и Мэри, похороны, первая готовка и Реми.<br>Основной план и готовность Foundry — под рукой.')
-build('future',future,'Ружья будущего','Что показать уже сегодня — и зачем это понадобится потом.<br>Короткий отбор, источники и решения, которые ещё открыты.')
+build('today',spec,'Сегодня в Баровии','Книжные сведения и выбранные тобой направления.<br>Рядом — сохранённая техническая подготовка Foundry.')
+build('future',future,'Ружья будущего','Найденные связи с дальнейшим сюжетом.<br>Что есть в источниках и что можно обсудить для нашей кампании.')
 manifest=docs/'offline-manifest.json';files=json.loads(manifest.read_text(encoding='utf-8'))
 for name in ['today.html','today.json','future.html','future.json']:
     if name not in files:files.append(name)
 manifest.write_text(json.dumps(files,ensure_ascii=False,indent=2),encoding='utf-8')
-sw=docs/'sw.js';s=sw.read_text(encoding='utf-8');s=re.sub(r"const VERSION='[^']+';","const VERSION='strad-gm-20261023-prep-v2';",s)
+sw=docs/'sw.js';s=sw.read_text(encoding='utf-8');s=re.sub(r"const VERSION='[^']+';","const VERSION='strad-gm-20261023-prep-v3';",s)
 if "'today.html'" not in s:s=s.replace("'index.html',","'index.html','today.html','today.json','future.html','future.json',")
 sw.write_text(s,encoding='utf-8')
 js=docs/'reader.js';s=js.read_text(encoding='utf-8')
