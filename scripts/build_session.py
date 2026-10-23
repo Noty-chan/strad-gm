@@ -77,10 +77,10 @@ manifest=docs/'offline-manifest.json';files=json.loads(manifest.read_text(encodi
 for name in ['today.html','today.json','future.html','future.json']:
     if name not in files:files.append(name)
 manifest.write_text(json.dumps(files,ensure_ascii=False,indent=2),encoding='utf-8')
-sw=docs/'sw.js';s=sw.read_text(encoding='utf-8');s=re.sub(r"const VERSION='[^']+';","const VERSION='strad-gm-20261023-prep-v1';",s)
+sw=docs/'sw.js';s=sw.read_text(encoding='utf-8');s=re.sub(r"const VERSION='[^']+';","const VERSION='strad-gm-20261023-prep-v2';",s)
 if "'today.html'" not in s:s=s.replace("'index.html',","'index.html','today.html','today.json','future.html','future.json',")
 sw.write_text(s,encoding='utf-8')
 js=docs/'reader.js';s=js.read_text(encoding='utf-8')
-s=s.replace("format:'strad-notes-1'","format:NOTE_FORMAT").replace("value.format!=='strad-notes-1'","value.format!==NOTE_FORMAT").replace("fetch('reader.json')","fetch(document.body.dataset.book||'reader.json')")
+s=s.replace("format:'strad-notes-1'","format:NOTE_FORMAT").replace("value.format!=='strad-notes-1'","value.format!==NOTE_FORMAT").replace("fetch('reader.json')","fetch(document.body.dataset.book||'reader.json')").replace("fetch(document.body.dataset.book||'reader.json')","fetch(document.body.dataset.book||'reader.json',{cache:'no-cache'})")
 js.write_text(s,encoding='utf-8')
 print('Built',len(spec),'session sections and',len(future),'future sections. Foundry summary:',handoff.exists())

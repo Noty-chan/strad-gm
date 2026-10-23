@@ -41,5 +41,5 @@ $('#import-notes').addEventListener('change',async e=>{const file=e.target.files
 let scrollTimer;window.addEventListener('scroll',()=>{if(!current)return;clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>{state.scroll[current]=window.scrollY;save();},250);},{passive:true});
 window.addEventListener('hashchange',()=>{const wanted=decodeURIComponent(location.hash.slice(1));if(book?.sections.some(s=>s.id===wanted)){render(wanted);$('#chapter').scrollIntoView({behavior:'instant',block:'start'});}});
 prefs();
-try{const r=await fetch(document.body.dataset.book||'reader.json');if(!r.ok)throw new Error(r.status);book=await r.json();const hash=decodeURIComponent(location.hash.slice(1));render(hash||state.last,{restore:!hash});}catch(e){$('#chapter').textContent='Не удалось загрузить материалы. Проверь соединение и обнови страницу.';console.error(e);}
+try{const r=await fetch(document.body.dataset.book||'reader.json',{cache:'no-cache'});if(!r.ok)throw new Error(r.status);book=await r.json();const hash=decodeURIComponent(location.hash.slice(1));render(hash||state.last,{restore:!hash});}catch(e){$('#chapter').textContent='Не удалось загрузить материалы. Проверь соединение и обнови страницу.';console.error(e);}
 import {setupOffline} from './offline.js';setupOffline();
