@@ -33,4 +33,14 @@ class Links(HTMLParser):
 for file in root.glob('*.html'):Links().feed(file.read_text(encoding='utf-8'))
 for file in json.loads((root/'offline-manifest.json').read_text(encoding='utf-8')):
     assert (root/file).exists(),file
+for name in ['today','future']:
+    data=json.loads((root/(name+'.json')).read_text(encoding='utf-8'))['sections']
+    assert len(data)>=6 and len({s['id'] for s in data})==len(data)
+    for section in data:
+        Links().feed(section['body'])
+        assert section['body'] and section['editorial']
+        assert 'D:/' not in section['body'] and 'C:/' not in section['body']
+    html=(root/(name+'.html')).read_text(encoding='utf-8')
+    assert 'data-store="strad.'+name+'.v1"' in html
+assert any(s['id']=='foundry' for s in json.loads((root/'today.json').read_text(encoding='utf-8'))['sections'])
 print(f'PASS: 54 unique cards, all roles and images; {len(reader)} chapters; HTML links and offline manifest.')
